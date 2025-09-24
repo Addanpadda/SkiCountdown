@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Countdown — Åre Ski Trip</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#60a5fa; --muted:#9aa7bf; --glass: rgba(255,255,255,0.04);
+      --radius:18px; --maxw:900px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.06), transparent),
+                  linear-gradient(180deg,#071028 0%, #081226 40%, #071526 100%);
+      color:#e6eef8; display:flex; align-items:center; justify-content:center; padding:32px;
+    }
+    .wrap{width:100%; max-width:var(--maxw)}
+    header{margin-bottom:22px}
+    .title{line-height:1}
+    .title h1{margin:0;font-size:20px}
+    .title p{margin:0;color:var(--muted);font-size:13px}
+
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+
+    .card{background:linear-gradient(180deg,var(--card), rgba(11,18,30,0.6)); border-radius:var(--radius); padding:18px; box-shadow: 0 8px 30px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03)}
+    .card h2{margin:0 0 8px 0}
+    .time{display:flex; gap:10px; align-items:stretch}
+    .unit{flex:1; background:var(--glass); padding:12px; border-radius:12px; text-align:center}
+    .number{font-size:28px; font-weight:700}
+    .label{font-size:12px; color:var(--muted); margin-top:6px}
+
+    .muted{color:var(--muted); font-size:13px}
+    .meta{display:flex; justify-content:space-between; align-items:center; margin-top:10px}
+
+    footer{margin-top:18px; color:var(--muted); font-size:13px; text-align:center}
+
+    .expired{opacity:0.9; color:#ffd6d6}
+
+    .row{display:flex; gap:12px; align-items:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Countdown — Åre Ski Trip</h1>
+        <p>Två countdowns: <strong>Maxa bilen</strong> och <strong>Mesa bilen</strong>.</p>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- Maxa bilen -->
+      <section class="card" id="maxa-card">
+        <h2>Maxa bilen</h2>
+        <div class="time" aria-live="polite">
+          <div class="unit"><div class="number" id="maxa-days">—</div><div class="label">Dagar</div></div>
+          <div class="unit"><div class="number" id="maxa-hours">—</div><div class="label">Timmar</div></div>
+          <div class="unit"><div class="number" id="maxa-mins">—</div><div class="label">Minuter</div></div>
+          <div class="unit"><div class="number" id="maxa-secs">—</div><div class="label">Sekunder</div></div>
+        </div>
+        <div class="muted" style="margin-top:10px">Status: <span id="maxa-status">Konfigurerad</span></div>
+      </section>
+
+      <!-- Mesa bilen -->
+      <section class="card" id="mesa-card">
+        <h2>Mesa bilen</h2>
+        <div class="time" aria-live="polite">
+          <div class="unit"><div class="number" id="mesa-days">—</div><div class="label">Dagar</div></div>
+          <div class="unit"><div class="number" id="mesa-hours">—</div><div class="label">Timmar</div></div>
+          <div class="unit"><div class="number" id="mesa-mins">—</div><div class="label">Minuter</div></div>
+          <div class="unit"><div class="number" id="mesa-secs">—</div><div class="label">Sekunder</div></div>
+        </div>
+        <div class="muted" style="margin-top:10px">Status: <span id="mesa-status">Konfigurerad</span></div>
+      </section>
+    </main>
+
+    <footer>
+      Tips: Datum/tid är hårdkodat i koden.
+    </footer>
+  </div>
+
+  <script>
+    // Ändra tiderna här direkt i koden
+    const times = {
+      maxa: '2025-12-19T08:00:00',
+      mesa: '2025-12-20T10:00:00'
+    };
+
+    function $(id){return document.getElementById(id)}
+
+    const items = ['maxa','mesa'];
+
+    function updateStatus(k,txt){ const el = $(k+'-status'); el.textContent = txt; }
+
+    function tick(){
+      const now = new Date();
+      items.forEach(k=>{
+        const target = new Date(times[k]);
+        const diff = target - now;
+        if(isNaN(target)){
+          $(k+'-days').textContent = '—'; $(k+'-hours').textContent='—'; $(k+'-mins').textContent='—'; $(k+'-secs').textContent='—';
+          $(k+'-status').textContent = 'Felaktigt datum';
+          return;
+        }
+
+        if(diff <= 0){
+          $(k+'-days').textContent = '0'; $(k+'-hours').textContent='0'; $(k+'-mins').textContent='0'; $(k+'-secs').textContent='0';
+          $(k+'-status').innerHTML = '<span class="expired">Avgått!</span>';
+          return;
+        }
+
+        const totalSec = Math.floor(diff/1000);
+        const days = Math.floor(totalSec / 86400);
+        const hours = Math.floor((totalSec % 86400) / 3600);
+        const mins = Math.floor((totalSec % 3600) / 60);
+        const secs = totalSec % 60;
+
+        $(k+'-days').textContent = String(days);
+        $(k+'-hours').textContent = String(hours).padStart(2,'0');
+        $(k+'-mins').textContent = String(mins).padStart(2,'0');
+        $(k+'-secs').textContent = String(secs).padStart(2,'0');
+
+        if(days>1) $(k+'-status').textContent = `Kvar: ${days} dagar`;
+        else if(days===1) $(k+'-status').textContent = `Imorgon — ${hours} timmar kvar`;
+        else $(k+'-status').textContent = `Idag — ${hours}t ${mins}m kvar`;
+      });
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
+
