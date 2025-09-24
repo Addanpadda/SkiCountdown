@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Countdown — Åre Ski Trip</title>
+  <title>Nedräkning för Åre!</title>
   <style>
     :root{
       --bg:#0f1724; --card:#0b1220; --accent:#60a5fa; --muted:#9aa7bf; --glass: rgba(255,255,255,0.04);
@@ -21,8 +21,8 @@
     .wrap{width:100%; max-width:var(--maxw)}
     header{margin-bottom:22px}
     .title{line-height:1}
-    .title h1{margin:0;font-size:20px}
-    .title p{margin:0;color:var(--muted);font-size:13px}
+    .title h1{margin:0;font-size:28px}
+    .title p{margin:0;color:var(--muted);font-size:14px}
 
     .grid{display:grid; grid-template-columns:1fr 1fr; gap:20px}
     @media (max-width:720px){.grid{grid-template-columns:1fr}}
@@ -48,7 +48,7 @@
   <div class="wrap">
     <header>
       <div class="title">
-        <h1>Countdown — Åre 2026! ⛷️</h1>
+        <h1>Åre 2026! ⛷️</h1>
         <p>Två countdowns: <strong>Maxa bilen</strong> och <strong>Mesa bilen</strong>.</p>
       </div>
     </header>
@@ -62,8 +62,8 @@
           <div class="unit"><div class="number" id="maxa-hours">—</div><div class="label">Timmar</div></div>
           <div class="unit"><div class="number" id="maxa-mins">—</div><div class="label">Minuter</div></div>
           <div class="unit"><div class="number" id="maxa-secs">—</div><div class="label">Sekunder</div></div>
-	  <div class="muted" style="margin-top:10px">Status: <span id="maxa-status">Konfigurerad</span></div>
         </div>
+	<div class="muted" style="margin-top:10px">Status: <span id="maxa-status">Konfigurerad</span></div>
       </section>
 
       <!-- Mesa bilen -->
